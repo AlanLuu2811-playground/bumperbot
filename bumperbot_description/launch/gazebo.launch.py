@@ -47,10 +47,19 @@ def generate_launch_description():
                    '-name', 'bumperbot'],
         output='screen')
 
+    gz_ros2_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'],
+        remappings=[
+            ('/imu', '/imu/out')])
+
     return LaunchDescription([
         model_arg,
         robot_state_publisher_node,
         gazebo_resource_path,
         gazebo,
-        gz_spawn_entity
+        gz_spawn_entity,
+        gz_ros2_bridge
     ])
