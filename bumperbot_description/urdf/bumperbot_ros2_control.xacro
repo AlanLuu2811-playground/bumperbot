@@ -4,15 +4,25 @@
 
     <ros2_control name="RobotSystem" type="system">
 
-        <xacro:if value="$(arg is_ignition)">
-            <hardware>
-                <plugin>ign_ros2_control/IgnitionSystem</plugin>
-            </hardware>
-        </xacro:if>
+        <xacro:if value="$(arg is_sim)">
+            <!-- ROS2 Humble -->
+            <xacro:if value="$(arg is_ignition)">
+                <hardware>
+                    <plugin>ign_ros2_control/IgnitionSystem</plugin>
+                </hardware>
+            </xacro:if>
 
-        <xacro:unless value="$(arg is_ignition)">
+            <!-- ROS2 Iron or above -->
+            <xacro:unless value="$(arg is_ignition)">
+                <hardware>
+                    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+                </hardware>
+            </xacro:unless>
+        </xacro:if>
+        <xacro:unless>
             <hardware>
-                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+                <plugin>bumperbot_firmware/BumperbotInterface</plugin>
+                <param name="port">/dev/ttyUSB0</param>
             </hardware>
         </xacro:unless>
 

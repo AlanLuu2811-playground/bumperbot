@@ -4,6 +4,8 @@
 
   <xacro:arg name="is_ignition" default="true"/>
 
+  <xacro:arg name="is_sim" default="true"/>
+
   <!-- Include Gazebo Parameters -->
     <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.xacro" />
 
