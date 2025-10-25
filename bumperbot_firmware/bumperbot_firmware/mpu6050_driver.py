@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Imu
@@ -76,4 +77,15 @@ class MPU6050_Driver(Node):
             self.is_connected_ = True
         except OSError:
             self.is_connected_ = False
+
+def main():
+    rclpy.init()
+    mpu6050_driver = MPU6050_Driver()
+    rclpy.spin(mpu6050_driver)
+
+    mpu6050_driver.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
 
