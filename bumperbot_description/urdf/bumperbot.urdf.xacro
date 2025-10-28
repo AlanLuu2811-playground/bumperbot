@@ -7,7 +7,7 @@
   <xacro:arg name="is_sim" default="true"/>
 
   <!-- Include Gazebo Parameters -->
-    <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.xacro" />
+  <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.xacro" />
 
   <!-- ROS2 Control -->
   <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_ros2_control.xacro" />
