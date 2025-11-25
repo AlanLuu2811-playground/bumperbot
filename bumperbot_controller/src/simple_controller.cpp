@@ -25,7 +25,7 @@ SimpleController::SimpleController(const std::string & name)
 
     wheel_cmd_pub_ = create_publisher<std_msgs::msg::Float64MultiArray>(
         "/simple_velocity_controller/commands", 10);
-    vel_sub_ = create_subscription<geometry_msgs::msg::TwistStamped>(
+    vel_sub_ = create_subscription<geometry_msgs::msg::Twist>(
         "/bumperbot_controller/cmd_vel", 
         10,
         std::bind(&SimpleController::velCallback, this, _1));
@@ -52,9 +52,9 @@ SimpleController::SimpleController(const std::string & name)
     RCLCPP_INFO_STREAM(get_logger(), "The conversion matrix is \n" << speed_conversion_);
 }
 
-void SimpleController::velCallback(const geometry_msgs::msg::TwistStamped & msg)
+void SimpleController::velCallback(const geometry_msgs::msg::Twist &msg)
 {
-    Eigen::Vector2d robot_speed(msg.twist.linear.x, msg.twist.angular.z);
+    Eigen::Vector2d robot_speed(msg.linear.x, msg.angular.z);
 
     Eigen::Vector2d wheel_speed = speed_conversion_.inverse() * robot_speed;
     std_msgs::msg::Float64MultiArray wheel_speed_msg;

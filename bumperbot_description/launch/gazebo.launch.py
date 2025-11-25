@@ -69,7 +69,10 @@ def generate_launch_description():
         package='ros_gz_bridge',
         executable='parameter_bridge',
         arguments=[
-            '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'],
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+            '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU',
+            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'
+        ],
         remappings=[
             ('/imu', '/imu/out')])
 
