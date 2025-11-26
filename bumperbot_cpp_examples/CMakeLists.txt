@@ -67,18 +67,15 @@ rclcpp_components_register_node(simple_action_client
   EXECUTABLE simple_action_client_node
 )
 
+add_executable(simple_qos_publisher src/simple_qos_publisher.cpp)
+ament_target_dependencies(simple_qos_publisher rclcpp std_msgs)
+
+add_executable(simple_qos_subscriber src/simple_qos_subscriber.cpp)
+ament_target_dependencies(simple_qos_subscriber rclcpp std_msgs)
+
 install(
     DIRECTORY include
     DESTINATION include
-)
-
-install(TARGETS
-  simple_turtlesim_kinematics
-  simple_tf_kinematics
-  simple_service_server
-  simple_service_client
-  simple_lifecycle_node
-  DESTINATION lib/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)
@@ -87,6 +84,17 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+install(TARGETS
+  simple_turtlesim_kinematics
+  simple_tf_kinematics
+  simple_service_server
+  simple_service_client
+  simple_lifecycle_node
+  simple_qos_publisher
+  simple_qos_subscriber
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 install(TARGETS
   simple_action_server
