@@ -4,6 +4,8 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
+import os
+
 def generate_launch_description():
 
     use_sim_time_arg = DeclareLaunchArgument(
@@ -16,10 +18,20 @@ def generate_launch_description():
         default_value="small_house"
     )
 
+    amcl_config_arg = DeclareLaunchArgument(
+        "amcl_config",
+        default_value=os.path.join(
+            get_package_share_directory("bumperbot_localization"),
+            "config",
+            "amcl.yaml"
+        )
+    )
+
     map_name = LaunchConfiguration("map_name")
     use_sim_time = LaunchConfiguration("use_sim_time")
+    amcl_config = LaunchConfiguration("amcl_config")
 
-    lifecycle_nodes = ["map_server"]
+    lifecycle_nodes = ["map_server", "amcl"]
 
     map_path = PathJoinSubstitution([
         get_package_share_directory("bumperbot_mapping"),
@@ -34,6 +46,17 @@ def generate_launch_description():
         output="screen",
         parameters=[
             {"yaml_filename": map_path},
+            {"use_sim_time": use_sim_time}
+        ]
+    )
+
+    nav2_amcl = Node(
+        package="nav2_amcl",
+        executable="amcl",
+        name="amcl",
+        output="screen",
+        parameters=[
+            amcl_config,
             {"use_sim_time": use_sim_time}
         ]
     )
@@ -53,6 +76,8 @@ def generate_launch_description():
     return LaunchDescription([
         map_name_arg,
         use_sim_time_arg,
+        amcl_config_arg,
         nav2_map_server,
+        nav2_amcl,
         nav2_lifecycle_manager
     ])
