@@ -29,7 +29,7 @@ install(TARGETS
 )
 
 install(
-    DIRECTORY maps
+    DIRECTORY config launch rviz maps
     DESTINATION share/${PROJECT_NAME}
 )
 
