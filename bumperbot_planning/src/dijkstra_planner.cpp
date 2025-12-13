@@ -14,7 +14,7 @@ DijkstraPlanner::DijkstraPlanner() : Node("dijkstra_node")
     rclcpp::QoS map_qos(10);
     map_qos.durability(RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL);
     map_sub_ = create_subscription<nav_msgs::msg::OccupancyGrid>(
-        "/map",
+        "/costmap/costmap",
         map_qos,
         std::bind(&DijkstraPlanner::mapCallback, this, std::placeholders::_1)
     );
@@ -98,9 +98,10 @@ nav_msgs::msg::Path DijkstraPlanner::plan(const geometry_msgs::msg::Pose & start
             GraphNode new_node = active_node + dir;
             if (std::find(visited_nodes.begin(), visited_nodes.end(), new_node) == visited_nodes.end() &&
                 poseOnMap(new_node) &&
-                map_->data.at(poseToCell(new_node)) == 0) {
+                map_->data.at(poseToCell(new_node)) < 99 &&
+                map_->data.at(poseToCell(new_node)) >= 0) {
 
-                new_node.cost = active_node.cost + 1;
+                new_node.cost = active_node.cost + 1 + map_->data.at(poseToCell(new_node));
                 new_node.prev = std::make_shared<GraphNode>(active_node);
                 pending_nodes.push(new_node);
                 visited_nodes.push_back(new_node);
