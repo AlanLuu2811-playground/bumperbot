@@ -1,13 +1,27 @@
-int x = 0;
+#define LED_PIN 13
 
 void setup() {
-  // put your setup code here, to run once:
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW); 
+
   Serial.begin(115200);
+  Serial.setTimeout(1);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  Serial.println(x);
-  x++;
-  delay(1000);
+  if (Serial.available())
+  {
+    int x = Serial.readString().toInt();
+    if(x == 0)
+    {
+      // turn off the led
+      digitalWrite(LED_PIN, LOW); 
+    }
+    else
+    {
+      // turn on the led
+      digitalWrite(LED_PIN, HIGH); 
+    }
+  }
+  delay(0.1);
 }
